@@ -17,8 +17,9 @@ if DEBUG:
 
 # Qt GUI stuff
 try:
-    from PyQt4 import QtCore, QtGui
-    from PyQt4.QtCore import QSettings
+    from PyQt5 import QtCore, QtGui
+    import PyQt5.QtWidgets as QW
+    from PyQt5.QtCore import QSettings
 except ImportError:
     print("There was an error importing the Qt python3 libraries,")
     print("These are required by to operate this program.")
@@ -32,7 +33,8 @@ try:
 except:
     sys.exit("Could not import own classes.")
 
-class Window(QtGui.QDialog):
+# class Window(QtGui.QDialog):
+class Window(QW.QDialog):
     def __init__(self):
         super(Window, self).__init__()
 
@@ -61,7 +63,7 @@ class Window(QtGui.QDialog):
         self.trayIcon.activated.connect(self.iconActivated)
 
         # Finally add the GUI item groupings we made to the layout and init it.
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QW.QVBoxLayout()
         mainLayout.addWidget(self.iconGroupBox)
         mainLayout.addWidget(self.deviceListGroupBox)
         mainLayout.addWidget(self.messageGroupBox)
@@ -132,16 +134,16 @@ class Window(QtGui.QDialog):
         self.settings.setValue('systrayicon', preference)
 
     def iconActivated(self, reason):
-        if reason in (QtGui.QSystemTrayIcon.Trigger, QtGui.QSystemTrayIcon.DoubleClick):
+        if reason in (QW.QSystemTrayIcon.Trigger, QW.QSystemTrayIcon.DoubleClick):
             self.iconComboBox.setCurrentIndex(
                 (self.iconComboBox.currentIndex() + 1)
                 % self.iconComboBox.count())
-        elif reason == QtGui.QSystemTrayIcon.MiddleClick:
+        elif reason == QW.QSystemTrayIcon.MiddleClick:
             self.showMessage()
 
     def showMessage(self):
         # Show the message that was typed in the boxes
-        icon = QtGui.QSystemTrayIcon.MessageIcon(
+        icon = QW.QSystemTrayIcon.MessageIcon(
             self.typeComboBox.itemData(self.typeComboBox.currentIndex()))
         self.trayIcon.showMessage(self.titleEdit.text(),
                                   self.bodyEdit.toPlainText(), icon,
@@ -149,7 +151,7 @@ class Window(QtGui.QDialog):
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
-        QtGui.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, "
+        QW.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, "
         "see the Github page to file bug reports or see further documentation and help.")
 
     def updateReceivers(self):
@@ -159,7 +161,7 @@ class Window(QtGui.QDialog):
                 self.oldReceiverList.append(item)
                 print("Adding device: " + item)
                 # Convert item to string to remove the excess info
-                item = QtGui.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
+                item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:
             # Items have been removed from the list!
@@ -171,23 +173,23 @@ class Window(QtGui.QDialog):
                     self.deviceSelectList.takeItem(self.deviceSelectList.row(x))
 
     def createIconGroupBox(self): # Add the SysTray preferences window grouping
-        self.iconGroupBox = QtGui.QGroupBox("Tray Icon")
+        self.iconGroupBox = QW.QGroupBox("Tray Icon")
 
-        self.iconLabel = QtGui.QLabel("Icon:")
+        self.iconLabel = QW.QLabel("Icon:")
 
-        self.iconComboBox = QtGui.QComboBox()
+        self.iconComboBox = QW.QComboBox()
         self.iconComboBox.addItem(QtGui.QIcon('images/Airplay-Light'), "Black Icon")
         self.iconComboBox.addItem(QtGui.QIcon('images/Airplay-Dark'), "White Icon")
 
-        self.showIconCheckBox = QtGui.QCheckBox("Show tray icon")
+        self.showIconCheckBox = QW.QCheckBox("Show tray icon")
         self.showIconCheckBox.setChecked(self.settings.value('systrayicon', type=bool))
         print("Got systrayicon from settings:" + str(self.settings.value('systrayicon', type=bool)))
 
-        self.systrayClosePromptCheckBox = QtGui.QCheckBox("Systray Close warning")
+        self.systrayClosePromptCheckBox = QW.QCheckBox("Systray Close warning")
         self.systrayClosePromptCheckBox.setChecked(self.settings.value('promptOnClose_systray', type=bool))
         print("Got promptOnClose_systray from settings:" + str(self.settings.value('promptOnClose_systray', type=bool)))
 
-        iconLayout = QtGui.QHBoxLayout()
+        iconLayout = QW.QHBoxLayout()
         iconLayout.addWidget(self.iconLabel)
         iconLayout.addWidget(self.iconComboBox)
         iconLayout.addStretch()
@@ -197,55 +199,55 @@ class Window(QtGui.QDialog):
 
     # Creates the device selection list.
     def createDeviceListGroupBox(self):
-        self.deviceListGroupBox = QtGui.QGroupBox("Airplay to")
+        self.deviceListGroupBox = QW.QGroupBox("Airplay to")
 
-        self.deviceSelectList = QtGui.QListWidget()
-        deviceSelectListNoDisplayItem = QtGui.QListWidgetItem("No display.")
+        self.deviceSelectList = QW.QListWidget()
+        deviceSelectListNoDisplayItem = QW.QListWidgetItem("No display.")
         self.deviceSelectList.addItem(deviceSelectListNoDisplayItem)
 
         # layout
-        deviceListLayout = QtGui.QHBoxLayout()
+        deviceListLayout = QW.QHBoxLayout()
         deviceListLayout.addWidget(self.deviceSelectList)
         self.deviceListGroupBox.setLayout(deviceListLayout)
 
     def createMessageGroupBox(self): # Add the message test GUI window grouping.
-        self.messageGroupBox = QtGui.QGroupBox("Balloon Message Test:")
+        self.messageGroupBox = QW.QGroupBox("Balloon Message Test:")
 
-        typeLabel = QtGui.QLabel("Type:")
+        typeLabel = QW.QLabel("Type:")
 
-        self.typeComboBox = QtGui.QComboBox()
-        self.typeComboBox.addItem("None", QtGui.QSystemTrayIcon.NoIcon)
+        self.typeComboBox = QW.QComboBox()
+        self.typeComboBox.addItem("None", QW.QSystemTrayIcon.NoIcon)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QtGui.QStyle.SP_MessageBoxInformation), "Information", QtGui.QSystemTrayIcon.Information)
+                QW.QStyle.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.Information)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QtGui.QStyle.SP_MessageBoxWarning), "Warning", QtGui.QSystemTrayIcon.Warning)
+                QW.QStyle.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.Warning)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QtGui.QStyle.SP_MessageBoxCritical), "Critical", QtGui.QSystemTrayIcon.Critical)
+                QW.QStyle.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.Critical)
         self.typeComboBox.setCurrentIndex(1)
 
-        self.durationLabel = QtGui.QLabel("Duration:")
+        self.durationLabel = QW.QLabel("Duration:")
 
-        self.durationSpinBox = QtGui.QSpinBox()
+        self.durationSpinBox = QW.QSpinBox()
         self.durationSpinBox.setRange(2, 15)
         self.durationSpinBox.setSuffix("s")
         self.durationSpinBox.setValue(5)
 
-        durationWarningLabel = QtGui.QLabel("(some systems might ignore this hint)")
+        durationWarningLabel = QW.QLabel("(some systems might ignore this hint)")
         durationWarningLabel.setIndent(10)
 
-        titleLabel = QtGui.QLabel("Title:")
+        titleLabel = QW.QLabel("Title:")
 
-        self.titleEdit = QtGui.QLineEdit("Cannot connect to network")
+        self.titleEdit = QW.QLineEdit("Cannot connect to network")
 
-        bodyLabel = QtGui.QLabel("Body:")
+        bodyLabel = QW.QLabel("Body:")
 
-        self.bodyEdit = QtGui.QTextEdit()
+        self.bodyEdit = QW.QTextEdit()
         self.bodyEdit.setPlainText("Don't believe me. Honestly, I don't have a clue.")
 
-        self.showMessageButton = QtGui.QPushButton("Show Message")
+        self.showMessageButton = QW.QPushButton("Show Message")
         self.showMessageButton.setDefault(True)
 
-        messageLayout = QtGui.QGridLayout()
+        messageLayout = QW.QGridLayout()
         messageLayout.addWidget(typeLabel, 0, 0)
         messageLayout.addWidget(self.typeComboBox, 0, 1, 1, 2)
         messageLayout.addWidget(self.durationLabel, 1, 0)
@@ -261,24 +263,24 @@ class Window(QtGui.QDialog):
         self.messageGroupBox.setLayout(messageLayout)
 
     def createActions(self): # Create Actions that can be taken from the System Tray Icon
-        self.minimizeAction = QtGui.QAction("Mi&nimize", self, triggered=self.hide)
+        self.minimizeAction = QW.QAction("Mi&nimize", self, triggered=self.hide)
 
         # Application is not the kind to be maximized
-        #self.maximizeAction = QtGui.QAction("Ma&ximize", self, triggered=self.showMaximized)
+        #self.maximizeAction = QW.QAction("Ma&ximize", self, triggered=self.showMaximized)
 
-        self.restoreAction = QtGui.QAction("&Restore", self, triggered=self.showNormal)
+        self.restoreAction = QW.QAction("&Restore", self, triggered=self.showNormal)
 
-        self.quitAction = QtGui.QAction("&Quit", self, triggered=QtGui.qApp.quit)
+        self.quitAction = QW.QAction("&Quit", self, triggered=QW.qApp.quit)
 
     def createTrayIcon(self):
-        self.trayIconMenu = QtGui.QMenu(self)
+        self.trayIconMenu = QW.QMenu(self)
         self.trayIconMenu.addAction(self.minimizeAction)
         #self.trayIconMenu.addAction(self.maximizeAction)
         self.trayIconMenu.addAction(self.restoreAction)
         self.trayIconMenu.addSeparator()
         self.trayIconMenu.addAction(self.quitAction)
 
-        self.trayIcon = QtGui.QSystemTrayIcon(self)
+        self.trayIcon = QW.QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
 
     def quit(self, reason):
@@ -288,13 +290,14 @@ class Window(QtGui.QDialog):
 
 if __name__ == '__main__':
 
-    app = QtGui.QApplication(['Open Airplay'])
+    app = QW.QApplication(['Open Airplay'])
+    # app = QtGui.QApplication(['Open Airplay'])
 
-    if not QtGui.QSystemTrayIcon.isSystemTrayAvailable():
-        QtGui.QMessageBox.critical(None, "Systray", "I couldn't detect any system tray on this system.")
+    if not QW.QSystemTrayIcon.isSystemTrayAvailable():
+        QW.QMessageBox.critical(None, "Systray", "I couldn't detect any system tray on this system.")
         sys.exit(1)
 
-    QtGui.QApplication.setQuitOnLastWindowClosed(False)
+    QW.QApplication.setQuitOnLastWindowClosed(False)
 
     window = Window()
     window.show()

@@ -7,7 +7,7 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 
 global DEBUG
 DEBUG = True
@@ -18,8 +18,8 @@ if __name__ == '__main__':
 
 # Qt GUI stuff
 try:
-    from PyQt5 import QtCore, QtGui
-    from PyQt5.QtCore import QSettings
+    from PyQt6 import QtCore, QtGui
+    from PyQt6.QtCore import QSettings
 except ImportError:
     print("There was an error importing the Qt python3 libraries,")
     print("These are required by to operate this program.")

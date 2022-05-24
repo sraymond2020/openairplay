@@ -17,9 +17,9 @@ if DEBUG:
 
 # Qt GUI stuff
 try:
-    from PyQt5 import QtCore, QtGui
-    import PyQt5.QtWidgets as QW
-    from PyQt5.QtCore import QSettings
+    from PyQt6 import QtCore, QtGui
+    import PyQt6.QtWidgets as QW
+    from PyQt6.QtCore import QSettings
 except ImportError:
     print("There was an error importing the Qt python3 libraries,")
     print("These are required by to operate this program.")
@@ -40,7 +40,7 @@ class Window(QW.QDialog):
 
         self.settings = QSettings('open-airplay')
         # Establishes a hook on our system settings.
-        # http://pyqt.sourceforge.net/Docs/PyQt4/pyqt_qsettings.html
+        # http://pyqt.sourceforge.net/Docs/PyQt6/pyqt_qsettings.html
 
         # Place items in our window.
         self.createIconGroupBox() # Tray Icon Settings
@@ -216,13 +216,13 @@ class Window(QW.QDialog):
         typeLabel = QW.QLabel("Type:")
 
         self.typeComboBox = QW.QComboBox()
-        self.typeComboBox.addItem("None", QW.QSystemTrayIcon.NoIcon)
+        self.typeComboBox.addItem("None", QW.QSystemTrayIcon.MessageIcon.NoIcon)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.Information)
+                QW.QStyle.StandardPixmap.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.MessageIcon.Information)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.Warning)
+                QW.QStyle.StandardPixmap.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.MessageIcon.Warning)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.Critical)
+                QW.QStyle.StandardPixmap.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.MessageIcon.Critical)
         self.typeComboBox.setCurrentIndex(1)
 
         self.durationLabel = QW.QLabel("Duration:")
@@ -263,14 +263,14 @@ class Window(QW.QDialog):
         self.messageGroupBox.setLayout(messageLayout)
 
     def createActions(self): # Create Actions that can be taken from the System Tray Icon
-        self.minimizeAction = QW.QAction("Mi&nimize", self, triggered=self.hide)
+        self.minimizeAction = QtGui.QAction("Mi&nimize", self, triggered=self.hide)
 
         # Application is not the kind to be maximized
-        #self.maximizeAction = QW.QAction("Ma&ximize", self, triggered=self.showMaximized)
+        # self.maximizeAction = QtGui.QAction("Ma&ximize", self, triggered=self.showMaximized)
 
-        self.restoreAction = QW.QAction("&Restore", self, triggered=self.showNormal)
+        self.restoreAction = QtGui.QAction("&Restore", self, triggered=self.showNormal)
 
-        self.quitAction = QW.QAction("&Quit", self, triggered=QW.qApp.quit)
+        self.quitAction = QtGui.QAction("&Quit", self, triggered=QW.QApplication.quit)
 
     def createTrayIcon(self):
         self.trayIconMenu = QW.QMenu(self)
@@ -303,4 +303,4 @@ if __name__ == '__main__':
     window.show()
 
     # After teh progreem endz:
-    sys.exit(app.exec_()) # Goodbye World
+    sys.exit(app.exec()) # Goodbye World

@@ -3,21 +3,28 @@ import pychromecast
 
 # List chromecasts on the network, but don't connect
 services, browser = pychromecast.discovery.discover_chromecasts()
+mydevice = services[0].friendly_name
+print(mydevice)
+# print(browser.friendly_name())
+# print(browser.devices.values())
 # Shut down discovery
 pychromecast.discovery.stop_discovery(browser)
 
 # Discover and connect to chromecasts named Living Room
-chromecasts, browser = pychromecast.get_listed_chromecasts(friendly_names=["Living Room"])
-[cc.device.friendly_name for cc in chromecasts]
-['Living Room']
+chromecasts, browser = pychromecast.get_listed_chromecasts(friendly_names=[mydevice])
+# chromecasts, browser = pychromecast.get_listed_chromecasts(known_hosts=["192.168.1.1"])
+print(chromecasts)
+[print(cc.device.friendly_name) for cc in chromecasts]
+# print(browser)
+# ['Living Room']
 
-# cast = chromecasts[0]
-# # Start worker thread and wait for cast device to be ready
-# cast.wait()
-# print(cast.device)
+cast = chromecasts[0]
+# Start worker thread and wait for cast device to be ready
+cast.wait()
+print(cast.device)
 # DeviceStatus(friendly_name='Living Room', model_name='Chromecast', manufacturer='Google Inc.', uuid=UUID('df6944da-f016-4cb8-97d0-3da2ccaa380b'), cast_type='cast')
 
-# print(cast.status)
+print(cast.status)
 # CastStatus(is_active_input=True, is_stand_by=False, volume_level=1.0, volume_muted=False, app_id='CC1AD845', display_name='Default Media Receiver', namespaces=['urn:x-cast:com.google.cast.player.message', 'urn:x-cast:com.google.cast.media'], session_id='CCA39713-9A4F-34A6-A8BF-5D97BE7ECA5C', transport_id='web-9', status_text='')
 
 # mc = cast.media_controller

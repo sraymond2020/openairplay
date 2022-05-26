@@ -35,7 +35,7 @@ class AirplayListener(object):
 def start():
     ZC = zeroconf.Zeroconf()
     listener = AirplayListener()
-    browser = zeroconf.ServiceBrowser(ZC, "_airplay._tcp.local.", listener)
+    browser = zeroconf.ServiceBrowser(ZC, ["_airplay._tcp.local.", "_googlecast._tcp.local."], listener)
     started = True
     if DEBUG:
         print("Listener started.")

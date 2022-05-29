@@ -5,6 +5,7 @@
 #  This application is licensed under the GNU GPLv3 License, included with
 #  this application source.
 
+import re
 import sys
 
 global DEBUG
@@ -161,7 +162,8 @@ class Window(QW.QDialog):
                 self.oldReceiverList.append(item)
                 print("Adding device: " + item)
                 # Convert item to string to remove the excess info
-                item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
+                # item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
+                item = QW.QListWidgetItem(re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item)))
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:
             # Items have been removed from the list!

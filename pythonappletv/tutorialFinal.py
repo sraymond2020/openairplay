@@ -122,12 +122,13 @@ async def connect(request):
     return web.Response(text=f"Connected to device {device_id}")
 
 
-@routes.get("/play/{id}/{fname}")
+@routes.get("/play/{id}")
 @web_command
 async def play(request, atv):
     try:
-        # url = "F:\Videos\VueJSCrashCourse2021.mp4"
-        await atv.stream.play_url(urllib.parse.quote(request.match_info["fname"]))
+        url = "F:\Videos\VueJSCrashCourse2021.mp4"
+        # url = (urllib.parse.quote(request.match_info["fname"]))
+        await atv.stream.play_url(url)
         atv.close()
         # await asyncio.gather(*atv.close())
     except Exception as ex:
@@ -199,7 +200,7 @@ def main():
     app["clients"] = {}
     app.add_routes(routes)
     app.on_shutdown.append(on_shutdown)
-    web.run_app(app)
+    web.run_app(app, port=8085)
 
 
 if __name__ == "__main__":

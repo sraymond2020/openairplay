@@ -3,6 +3,7 @@ from urllib.parse import urlencode, quote
 import asyncio
 import pyatv
 from pyatv import scan, pair
+from pyatv.helpers import is_streamable, is
 from pyatv.const import Protocol
 
 localDirectory = os.getcwd()
@@ -38,13 +39,10 @@ async def main():
     # url = urlencode(url)
 
     print(url)
-    path, fname = os.path.split(url)
-    print("PATH --> ", path)
-    os.chdir(path)
-    # fname = quote(fname)
-    print("File Name -->", fname)
-
-    await atv.stream.play_url(fname)
+    if is_streamable(url):
+        await atv.stream.play_url(url)
+    else:
+        print("File not playable")
 
     atv.close()
     await asyncio.gather(*atv.close())

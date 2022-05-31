@@ -18,15 +18,9 @@ if DEBUG:
 
 # Qt GUI stuff
 try:
-<<<<<<< HEAD
-    from PyQt5 import QtCore, QtGui
-    import PyQt5.QtWidgets as QW
-    from PyQt5.QtCore import QSettings
-=======
     from PyQt6 import QtCore, QtGui
     import PyQt6.QtWidgets as QW
     from PyQt6.QtCore import QSettings
->>>>>>> 9526e413e4b2a08272c1fdb2a6d4500d7c6a43bc
 except ImportError:
     print("There was an error importing the Qt python3 libraries,")
     print("These are required by to operate this program.")
@@ -168,12 +162,8 @@ class Window(QW.QDialog):
                 self.oldReceiverList.append(item)
                 print("Adding device: " + item)
                 # Convert item to string to remove the excess info
-<<<<<<< HEAD
-                item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
-=======
                 # item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
                 item = QW.QListWidgetItem(re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item)))
->>>>>>> 9526e413e4b2a08272c1fdb2a6d4500d7c6a43bc
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:
             # Items have been removed from the list!
@@ -228,15 +218,6 @@ class Window(QW.QDialog):
         typeLabel = QW.QLabel("Type:")
 
         self.typeComboBox = QW.QComboBox()
-<<<<<<< HEAD
-        self.typeComboBox.addItem("None", QW.QSystemTrayIcon.NoIcon)
-        self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.Information)
-        self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.Warning)
-        self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.Critical)
-=======
         self.typeComboBox.addItem("None", QW.QSystemTrayIcon.MessageIcon.NoIcon)
         self.typeComboBox.addItem(self.style().standardIcon(
                 QW.QStyle.StandardPixmap.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.MessageIcon.Information)
@@ -244,7 +225,6 @@ class Window(QW.QDialog):
                 QW.QStyle.StandardPixmap.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.MessageIcon.Warning)
         self.typeComboBox.addItem(self.style().standardIcon(
                 QW.QStyle.StandardPixmap.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.MessageIcon.Critical)
->>>>>>> 9526e413e4b2a08272c1fdb2a6d4500d7c6a43bc
         self.typeComboBox.setCurrentIndex(1)
 
         self.durationLabel = QW.QLabel("Duration:")
@@ -288,19 +268,11 @@ class Window(QW.QDialog):
         self.minimizeAction = QW.QAction("Mi&nimize", self, triggered=self.hide)
 
         # Application is not the kind to be maximized
-<<<<<<< HEAD
-        #self.maximizeAction = QW.QAction("Ma&ximize", self, triggered=self.showMaximized)
-=======
         # self.maximizeAction = QtGui.QAction("Ma&ximize", self, triggered=self.showMaximized)
->>>>>>> 9526e413e4b2a08272c1fdb2a6d4500d7c6a43bc
 
         self.restoreAction = QW.QAction("&Restore", self, triggered=self.showNormal)
 
-<<<<<<< HEAD
-        self.quitAction = QW.QAction("&Quit", self, triggered=QW.qApp.quit)
-=======
         self.quitAction = QtGui.QAction("&Quit", self, triggered=QW.QApplication.quit)
->>>>>>> 9526e413e4b2a08272c1fdb2a6d4500d7c6a43bc
 
     def createTrayIcon(self):
         self.trayIconMenu = QW.QMenu(self)

@@ -27,6 +27,7 @@ class AirplayListener(object):
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
+        # print(info.properties[b'fn'])
         airplayReceivers.append(name)
         if DEBUG:
             print("Airplay receiver %s added, service info: %s" % (name, info))
@@ -35,7 +36,8 @@ class AirplayListener(object):
 def start():
     ZC = zeroconf.Zeroconf()
     listener = AirplayListener()
-    browser = zeroconf.ServiceBrowser(ZC, "_airplay._tcp.local.", listener)
+    browser = zeroconf.ServiceBrowser(ZC, ["_airplay._tcp.local.", "_googlecast._tcp.local."], listener)
+    # browser = zeroconf.ServiceBrowser(ZC, ["_googlecast._tcp.local."], listener)
     started = True
     if DEBUG:
         print("Listener started.")

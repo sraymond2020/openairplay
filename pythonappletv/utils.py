@@ -6,7 +6,8 @@ from tkinter.filedialog import askdirectory, askopenfilenames
 def main():
     # folder_select()
     items = file_select()
-    [print(item) for item in items]
+    print(os.path.join("/".join(items[0])))
+    # [print(item) for item in items]
 
 def folder_select():
     path = askdirectory(title='Select Folder') # shows dialog box and return the path

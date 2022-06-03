@@ -35,6 +35,8 @@ except:
     sys.exit("Could not import own classes.")
 
 # class Window(QtGui.QDialog):
+
+
 class Window(QW.QDialog):
     def __init__(self):
         super(Window, self).__init__()
@@ -44,9 +46,9 @@ class Window(QW.QDialog):
         # http://pyqt.sourceforge.net/Docs/PyQt6/pyqt_qsettings.html
 
         # Place items in our window.
-        self.createIconGroupBox() # Tray Icon Settings
-        self.createMessageGroupBox() # Test notification group
-        self.createDeviceListGroupBox() # Airplay server selection
+        self.createIconGroupBox()  # Tray Icon Settings
+        self.createMessageGroupBox()  # Test notification group
+        self.createDeviceListGroupBox()  # Airplay server selection
 
         # Set the iconlabel to it's minimum width without scollbaring.
         self.iconLabel.setMinimumWidth(self.durationLabel.sizeHint().width())
@@ -58,7 +60,8 @@ class Window(QW.QDialog):
         # Attach clicks on things to actual functions
         self.showMessageButton.clicked.connect(self.showMessage)
         self.showIconCheckBox.toggled.connect(self.trayIconVisible)
-        self.systrayClosePromptCheckBox.toggled.connect(self.setSystrayClosePrompt)
+        self.systrayClosePromptCheckBox.toggled.connect(
+            self.setSystrayClosePrompt)
         self.iconComboBox.currentIndexChanged.connect(self.setIcon)
         self.trayIcon.messageClicked.connect(self.messageClicked)
         self.trayIcon.activated.connect(self.iconActivated)
@@ -86,7 +89,7 @@ class Window(QW.QDialog):
 
         # Setup stuff to poll available receivers every 3 seconds.
         self.oldReceiverList = []
-        self.timer=QtCore.QTimer()
+        self.timer = QtCore.QTimer()
         self.timer.start(3000)
         self.timer.timeout.connect(self.updateReceivers)
 
@@ -107,8 +110,8 @@ class Window(QW.QDialog):
         if self.trayIcon.isVisible():
             if self.settings.value('promptOnClose_systray', type=bool):
                 print("The program is returning to the system tray, user notified.")
-                QtGui.QMessageBox.information(self, "Systray",
-                    "The program will keep running in the system tray. \
+                QW.QMessageBox.information(self, "Systray",
+                                              "The program will keep running in the system tray. \
                     To terminate the program, choose <b>Quit</b> in \
                     the menu of the system tray airplay icon.")
             else:
@@ -135,25 +138,29 @@ class Window(QW.QDialog):
         self.settings.setValue('systrayicon', preference)
 
     def iconActivated(self, reason):
-        if reason in (QW.QSystemTrayIcon.Trigger, QW.QSystemTrayIcon.DoubleClick):
+        if reason in (
+            QW.QSystemTrayIcon.ActivationReason.Trigger, 
+            QW.QSystemTrayIcon.ActivationReason.DoubleClick):
             self.iconComboBox.setCurrentIndex(
                 (self.iconComboBox.currentIndex() + 1)
                 % self.iconComboBox.count())
-        elif reason == QW.QSystemTrayIcon.MiddleClick:
+        elif reason == QW.QSystemTrayIcon.ActivationReason.MiddleClick:
             self.showMessage()
 
     def showMessage(self):
         # Show the message that was typed in the boxes
         icon = QW.QSystemTrayIcon.MessageIcon(
             self.typeComboBox.itemData(self.typeComboBox.currentIndex()))
-        self.trayIcon.showMessage(self.titleEdit.text(),
-                                  self.bodyEdit.toPlainText(), icon,
-                                  self.durationSpinBox.value() * 1000)
+        self.trayIcon.showMessage(
+            self.titleEdit.text(),
+            self.bodyEdit.toPlainText(),
+            icon,
+            self.durationSpinBox.value() * 1000)
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
         QW.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, "
-        "see the Github page to file bug reports or see further documentation and help.")
+                                   "see the Github page to file bug reports or see further documentation and help.")
 
     def updateReceivers(self):
         if list(set(discovery.airplayReceivers) - set(self.oldReceiverList)) != []:
@@ -163,33 +170,42 @@ class Window(QW.QDialog):
                 print("Adding device: " + item)
                 # Convert item to string to remove the excess info
                 # item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
-                item = QW.QListWidgetItem(re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item)))
+                item = QW.QListWidgetItem(
+                    re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item)))
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:
             # Items have been removed from the list!
             for item in list(set(self.oldReceiverList) - set(discovery.airplayReceivers)):
                 self.oldReceiverList.remove(item)
                 print("Removed device: " + item)
-                items = self.deviceSelectList.findItems(item, QtCore.Qt.MatchExactly)
+                items = self.deviceSelectList.findItems(
+                    item, QtCore.Qt.MatchExactly)
                 for x in items:
-                    self.deviceSelectList.takeItem(self.deviceSelectList.row(x))
+                    self.deviceSelectList.takeItem(
+                        self.deviceSelectList.row(x))
 
-    def createIconGroupBox(self): # Add the SysTray preferences window grouping
+    def createIconGroupBox(self):  # Add the SysTray preferences window grouping
         self.iconGroupBox = QW.QGroupBox("Tray Icon")
 
         self.iconLabel = QW.QLabel("Icon:")
 
         self.iconComboBox = QW.QComboBox()
-        self.iconComboBox.addItem(QtGui.QIcon('images/Airplay-Light'), "Black Icon")
-        self.iconComboBox.addItem(QtGui.QIcon('images/Airplay-Dark'), "White Icon")
+        self.iconComboBox.addItem(QtGui.QIcon(
+            'images/Airplay-Light'), "Black Icon")
+        self.iconComboBox.addItem(QtGui.QIcon(
+            'images/Airplay-Dark'), "White Icon")
 
         self.showIconCheckBox = QW.QCheckBox("Show tray icon")
-        self.showIconCheckBox.setChecked(self.settings.value('systrayicon', type=bool))
-        print("Got systrayicon from settings:" + str(self.settings.value('systrayicon', type=bool)))
+        self.showIconCheckBox.setChecked(
+            self.settings.value('systrayicon', type=bool))
+        print("Got systrayicon from settings:" +
+              str(self.settings.value('systrayicon', type=bool)))
 
         self.systrayClosePromptCheckBox = QW.QCheckBox("Systray Close warning")
-        self.systrayClosePromptCheckBox.setChecked(self.settings.value('promptOnClose_systray', type=bool))
-        print("Got promptOnClose_systray from settings:" + str(self.settings.value('promptOnClose_systray', type=bool)))
+        self.systrayClosePromptCheckBox.setChecked(
+            self.settings.value('promptOnClose_systray', type=bool))
+        print("Got promptOnClose_systray from settings:" +
+              str(self.settings.value('promptOnClose_systray', type=bool)))
 
         iconLayout = QW.QHBoxLayout()
         iconLayout.addWidget(self.iconLabel)
@@ -212,19 +228,21 @@ class Window(QW.QDialog):
         deviceListLayout.addWidget(self.deviceSelectList)
         self.deviceListGroupBox.setLayout(deviceListLayout)
 
-    def createMessageGroupBox(self): # Add the message test GUI window grouping.
+    # Add the message test GUI window grouping.
+    def createMessageGroupBox(self):
         self.messageGroupBox = QW.QGroupBox("Balloon Message Test:")
 
         typeLabel = QW.QLabel("Type:")
 
         self.typeComboBox = QW.QComboBox()
-        self.typeComboBox.addItem("None", QW.QSystemTrayIcon.MessageIcon.NoIcon)
+        self.typeComboBox.addItem(
+            "None", QW.QSystemTrayIcon.MessageIcon.NoIcon)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.StandardPixmap.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.MessageIcon.Information)
+            QW.QStyle.StandardPixmap.SP_MessageBoxInformation), "Information", QW.QSystemTrayIcon.MessageIcon.Information)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.StandardPixmap.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.MessageIcon.Warning)
+            QW.QStyle.StandardPixmap.SP_MessageBoxWarning), "Warning", QW.QSystemTrayIcon.MessageIcon.Warning)
         self.typeComboBox.addItem(self.style().standardIcon(
-                QW.QStyle.StandardPixmap.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.MessageIcon.Critical)
+            QW.QStyle.StandardPixmap.SP_MessageBoxCritical), "Critical", QW.QSystemTrayIcon.MessageIcon.Critical)
         self.typeComboBox.setCurrentIndex(1)
 
         self.durationLabel = QW.QLabel("Duration:")
@@ -234,7 +252,8 @@ class Window(QW.QDialog):
         self.durationSpinBox.setSuffix("s")
         self.durationSpinBox.setValue(5)
 
-        durationWarningLabel = QW.QLabel("(some systems might ignore this hint)")
+        durationWarningLabel = QW.QLabel(
+            "(some systems might ignore this hint)")
         durationWarningLabel.setIndent(10)
 
         titleLabel = QW.QLabel("Title:")
@@ -244,7 +263,8 @@ class Window(QW.QDialog):
         bodyLabel = QW.QLabel("Body:")
 
         self.bodyEdit = QW.QTextEdit()
-        self.bodyEdit.setPlainText("Don't believe me. Honestly, I don't have a clue.")
+        self.bodyEdit.setPlainText(
+            "Don't believe me. Honestly, I don't have a clue.")
 
         self.showMessageButton = QW.QPushButton("Show Message")
         self.showMessageButton.setDefault(True)
@@ -264,20 +284,23 @@ class Window(QW.QDialog):
         messageLayout.setRowStretch(4, 1)
         self.messageGroupBox.setLayout(messageLayout)
 
-    def createActions(self): # Create Actions that can be taken from the System Tray Icon
-        self.minimizeAction = QW.QAction("Mi&nimize", self, triggered=self.hide)
+    def createActions(self):  # Create Actions that can be taken from the System Tray Icon
+        self.minimizeAction = QtGui.QAction(
+            "Mi&nimize", self, triggered=self.hide)
 
         # Application is not the kind to be maximized
         # self.maximizeAction = QtGui.QAction("Ma&ximize", self, triggered=self.showMaximized)
 
-        self.restoreAction = QW.QAction("&Restore", self, triggered=self.showNormal)
+        self.restoreAction = QtGui.QAction(
+            "&Restore", self, triggered=self.showNormal)
 
-        self.quitAction = QtGui.QAction("&Quit", self, triggered=QW.QApplication.quit)
+        self.quitAction = QtGui.QAction(
+            "&Quit", self, triggered=QW.QApplication.quit)
 
     def createTrayIcon(self):
         self.trayIconMenu = QW.QMenu(self)
         self.trayIconMenu.addAction(self.minimizeAction)
-        #self.trayIconMenu.addAction(self.maximizeAction)
+        # self.trayIconMenu.addAction(self.maximizeAction)
         self.trayIconMenu.addAction(self.restoreAction)
         self.trayIconMenu.addSeparator()
         self.trayIconMenu.addAction(self.quitAction)
@@ -287,8 +310,9 @@ class Window(QW.QDialog):
 
     def quit(self, reason):
         del self.settings
-        #discovery.stop()
+        # discovery.stop()
         sys.exit(reason)
+
 
 if __name__ == '__main__':
 
@@ -296,7 +320,8 @@ if __name__ == '__main__':
     # app = QtGui.QApplication(['Open Airplay'])
 
     if not QW.QSystemTrayIcon.isSystemTrayAvailable():
-        QW.QMessageBox.critical(None, "Systray", "I couldn't detect any system tray on this system.")
+        QW.QMessageBox.critical(
+            None, "Systray", "I couldn't detect any system tray on this system.")
         sys.exit(1)
 
     QW.QApplication.setQuitOnLastWindowClosed(False)
@@ -305,4 +330,4 @@ if __name__ == '__main__':
     window.show()
 
     # After teh progreem endz:
-    sys.exit(app.exec()) # Goodbye World
+    sys.exit(app.exec())  # Goodbye World

@@ -1,5 +1,4 @@
-
-
+import os
 import asyncio
 from aiohttp import WSMsgType, web
 import pyatv
@@ -126,7 +125,11 @@ async def connect(request):
 @web_command
 async def play(request, atv):
     try:
-        url = "F:\Videos\VueJSCrashCourse2021.mp4"
+        import utils
+
+        # url = os.path.join((utils.file_select())[0])
+        url = (os.path.join("/".join(utils.file_select[0])))
+        # url = "F:\Videos\VueJSCrashCourse2021.mp4"
         # url = (urllib.parse.quote(request.match_info["fname"]))
         await atv.stream.play_url(url)
         atv.close()

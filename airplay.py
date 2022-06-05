@@ -6,6 +6,7 @@
 #  this application source.
 
 import sys
+from dataclasses import dataclass
 
 from PyQt6 import QtWidgets
 
@@ -29,4 +30,8 @@ except ImportError:
 
 class AirplayDevice():
     def __init__():
-        print("")
+        print("Airplay")
+
+class ChromecastDevice():
+    def __init__():
+        print("Chromecast")

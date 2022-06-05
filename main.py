@@ -157,6 +157,10 @@ class Window(QW.QDialog):
             icon,
             self.durationSpinBox.value() * 1000)
 
+    def selectionChanged(self):
+        # Eumerates Selected Device
+        print("Selected items: ", self.deviceSelectList.selectedItems())
+
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
         QW.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, "
@@ -222,6 +226,7 @@ class Window(QW.QDialog):
         self.deviceSelectList = QW.QListWidget()
         deviceSelectListNoDisplayItem = QW.QListWidgetItem("No display.")
         self.deviceSelectList.addItem(deviceSelectListNoDisplayItem)
+        self.deviceSelectList.itemSelectionChanged.connect(self.selectionChanged)
 
         # layout
         deviceListLayout = QW.QHBoxLayout()

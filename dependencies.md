@@ -3,8 +3,8 @@
 
  * Python 3
    * pip3 install zeroconf
- * Qt4
-   * Python 3 Qt4 bindings
+ * Qt6
+   * Python 3 Qt6 bindings
 
 Ubuntu:
 ---

@@ -167,6 +167,7 @@ class Window(QW.QDialog):
                                    "see the Github page to file bug reports or see further documentation and help.")
 
     def updateReceivers(self):
+        print(discovery.airplayReceivers)
         if list(set(discovery.airplayReceivers) - set(self.oldReceiverList)) != []:
             # The new list has items oldReceiverList doesn't!
             for item in list(set(discovery.airplayReceivers) - set(self.oldReceiverList)):

@@ -8,7 +8,8 @@ except ImportError:
     print("Please ensure you have it installed.")
     sys.exit("Could not find zeroconf.")
 
-global airplayReceivers
+global airplayReceivers, devices
+devices = {}
 airplayReceivers = []
 
 global discoveryStarted
@@ -27,7 +28,7 @@ class AirplayListener(object):
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
-        # print(info.name)
+        print(info['ServiceInfo'])
         # print(info.properties[b'fn'])
         if str(name).find("_airplay._") > 0:
             displayName = str(info.name)
@@ -36,9 +37,12 @@ class AirplayListener(object):
             displayName = bytes(info.properties[b'fn']).decode('utf-8')
             # airplayReceivers.append([displayName, name])
         airplayReceivers.append(name)
-        print(displayName)
+        devices[name] = info
+        # print(displayName)
+        # print(devices)
         if DEBUG:
-            print("Airplay receiver %s added, service info: %s" % (name, info))
+            # print("Airplay receiver %s added, service info: %s" % (name, info))
+            pass
 
 # Start the listener
 def start():

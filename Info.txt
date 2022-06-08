@@ -1,0 +1,46 @@
+ServiceInfo(
+	type='_airplay._tcp.local.',
+	name='Living Room Apple TV._airplay._tcp.local.',
+	addresses=[b'\xc0\xa8\x01c'],
+	port=7000,
+	weight=0,
+	priority=0,
+	server='Living-Room-Apple-TV.local.',
+	properties={
+		b'deviceid': b'68:64:4B:2B:B7:53',
+		b'features': b'0x5A7FFFF7,0x1E',
+		b'flags': b'0x4',
+		b'model': b'AppleTV3,2',
+		b'pk': b'374ebbbcc2780d1e266622117957ad6a600ef3a3c8e942c52c82efe001886729',
+		b'pi': b'eaa462f2-331c-4655-b0f5-739a1ee41e72',
+		b'srcvers': b'220.68',
+		b'osvers': b'8.4.4',
+		b'vv': b'2'
+	},
+	interface_index=None
+)
+
+ServiceInfo(
+	type='_googlecast._tcp.local.', 
+	name='Chromecast-1ec4955b64efae471819a80880fec4f2._googlecast._tcp.local.', 
+	addresses=[b'\xc0\xa8\x01\x1e'], 
+	port=8009, 
+	weight=0, 
+	priority=0, 
+	server='1ec4955b-64ef-ae47-1819-a80880fec4f2.local.', 
+	properties={
+		b'id': b'1ec4955b64efae471819a80880fec4f2', 
+		b'cd': b'AA948D48021E8F58E5A7D81BF50AB062', 
+		b'rm': b'', 
+		b've': b'05', 
+		b'md': b'Chromecast', 
+		b'ic': b'/setup/icon.png', 
+		b'fn': b'Living Room TV', 
+		b'ca': b'201221', 
+		b'st': b'0', 
+		b'bs': b'FA8FCA3D066B', 
+		b'nf': b'1', 
+		b'rs': b''
+	}, 
+	interface_index=None
+)

@@ -20,7 +20,7 @@ if DEBUG:
 try:
     from PyQt6 import QtCore, QtGui
     import PyQt6.QtWidgets as QW
-    from PyQt6.QtCore import QSettings
+    from PyQt6.QtCore import QSettings, Qt
 except ImportError:
     print("There was an error importing the Qt python3 libraries,")
     print("These are required by to operate this program.")
@@ -48,6 +48,7 @@ class Window(QW.QDialog):
         # Place items in our window.
         self.createIconGroupBox()  # Tray Icon Settings
         self.createMessageGroupBox()  # Test notification group
+        self.createMediaButtonsGroupBox() # Media Buttons for Casting Media
         self.createDeviceListGroupBox()  # Airplay server selection
 
         # Set the iconlabel to it's minimum width without scollbaring.
@@ -70,6 +71,7 @@ class Window(QW.QDialog):
         mainLayout = QW.QVBoxLayout()
         mainLayout.addWidget(self.iconGroupBox)
         mainLayout.addWidget(self.deviceListGroupBox)
+        mainLayout.addWidget(self.mediaGroupBox)
         mainLayout.addWidget(self.messageGroupBox)
         self.setLayout(mainLayout)
 
@@ -163,8 +165,8 @@ class Window(QW.QDialog):
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
-        QW.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, "
-                                   "see the Github page to file bug reports or see further documentation and help.")
+        QW.QMessageBox.information(None, "OpenAirplay Help", "If you need help with OpenAirplay, " 
+            "see the Github page to file bug reports or see further documentation and help.")
 
     def updateReceivers(self):
         if list(set(discovery.airplayReceivers) - set(self.oldReceiverList)) != []:
@@ -233,6 +235,33 @@ class Window(QW.QDialog):
         deviceListLayout.addWidget(self.deviceSelectList)
         self.deviceListGroupBox.setLayout(deviceListLayout)
 
+    # Add the Media Buttons GUI window grouping.
+    def createMediaButtonsGroupBox(self):
+        self.mediaGroupBox = QW.QGroupBox("Media Controller")
+    
+        self.playButton = QW.QPushButton("Play")
+        self.pauseButton = QW.QPushButton("Pause")
+        self.stopButton = QW.QPushButton("Stop")
+        self.backButton = QW.QPushButton("Back")
+        self.fwdButton = QW.QPushButton("Forward")
+        # self.showMessageButton.setDefault(True)
+
+        #layout
+        mediaLayout = QW.QHBoxLayout()
+        mediaLayout.addWidget(self.backButton)
+        mediaLayout.addWidget(self.playButton)
+        mediaLayout.addWidget(self.pauseButton)
+        mediaLayout.addWidget(self.stopButton)
+        mediaLayout.addWidget(self.fwdButton)
+        # mediaLayout.addWidget(self.playButton, 1, 1, 1, 1)
+        # mediaLayout.addWidget(self.pauseButton, 1, 2, 1, 1)
+        # mediaLayout.addWidget(self.stopButton, 1, 3, 1, 1)
+        # mediaLayout.setColumnStretch(1, 3)
+        # mediaLayout.setRowStretch(1, 1)
+        # mediaLayout.setStretch(2, 2)
+        self.mediaGroupBox.setLayout(mediaLayout)
+
+    
     # Add the message test GUI window grouping.
     def createMessageGroupBox(self):
         self.messageGroupBox = QW.QGroupBox("Balloon Message Test:")

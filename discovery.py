@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import airplay
 try:
     import zeroconf
 except ImportError:
@@ -21,6 +22,8 @@ DEBUG = True
 browser = None
 
 class AirplayListener(object):
+    global deviceList
+    deviceList = {}
 
     def remove_service(self, zeroconf, type, name):
         airplayReceivers.remove(name)
@@ -32,9 +35,11 @@ class AirplayListener(object):
         # print(info.properties[b'fn'])
         if str(name).find("_airplay._") > 0:
             displayName = str(info.name)
+            deviceList[name] = airplay.AirplayDevice(info)
             # airplayReceivers.append([displayName, name])
         elif str(name).find("_googlecast._") > 0:
             displayName = bytes(info.properties[b'fn']).decode('utf-8')
+            deviceList[name] = airplay.ChromecastDevice(info)
             # airplayReceivers.append([displayName, name])
         airplayReceivers.append(name)
         devices[name] = info

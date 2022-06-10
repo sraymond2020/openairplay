@@ -30,7 +30,6 @@ except ImportError:
 # Airplay Things:
 try:
     import discovery
-    import airplay
 except:
     sys.exit("Could not import own classes.")
 
@@ -177,7 +176,9 @@ class Window(QW.QDialog):
                 # Convert item to string to remove the excess info
                 # item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
                 item = QW.QListWidgetItem(
-                    re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item)))
+                    # re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item))
+                    discovery.deviceList[item].properName
+                    )
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:
             # Items have been removed from the list!

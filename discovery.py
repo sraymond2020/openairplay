@@ -9,9 +9,10 @@ except ImportError:
     print("Please ensure you have it installed.")
     sys.exit("Could not find zeroconf.")
 
-global airplayReceivers, devices
+global airplayReceivers, devices, deviceList
 devices = {}
 airplayReceivers = []
+deviceList = {}
 
 global discoveryStarted
 discoveryStarted = False
@@ -22,8 +23,6 @@ DEBUG = True
 browser = None
 
 class AirplayListener(object):
-    global deviceList
-    deviceList = {}
 
     def remove_service(self, zeroconf, type, name):
         airplayReceivers.remove(name)
@@ -43,9 +42,9 @@ class AirplayListener(object):
             # airplayReceivers.append([displayName, name])
         airplayReceivers.append(name)
         devices[name] = info
-        print(displayName)
-        print(devices)
         if DEBUG:
+            # print(displayName)
+            # print(devices)
             # print("Airplay receiver %s added, service info: %s" % (name, info))
             pass
 

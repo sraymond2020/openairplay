@@ -160,7 +160,25 @@ class Window(QW.QDialog):
 
     def selectionChanged(self):
         # Eumerates Selected Device
-        print("Selected items: ", self.deviceSelectList.selectedItems())
+        # print("Selected items: ", self.deviceSelectList.selectedItems())
+        # print(self.deviceSelectList.selectedItems()[0].text())
+        r = self.deviceSelectList.currentIndex().row()
+        name, device = str(self.deviceSelectList.selectedItems()[0].text()).split(": (")
+        device = device.replace(")", "")
+        # print(device)
+        # print(name)
+        deviceCheck = {
+            "Airplay": "._airplay._tcp.local.",
+            "Chromecast": "._googlecast._tcp.local."
+        }
+        for k, v in discovery.deviceList.items():
+            if k.find(deviceCheck["Airplay"]):
+                pass
+            if k.find(deviceCheck["Chromecast"]):
+                pass
+                print(k) 
+                print(v)
+                print()
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
@@ -168,6 +186,8 @@ class Window(QW.QDialog):
             "see the Github page to file bug reports or see further documentation and help.")
 
     def updateReceivers(self):
+        # print(discovery.deviceList)
+        # print(type(discovery.deviceList))
         if list(set(discovery.airplayReceivers) - set(self.oldReceiverList)) != []:
             # The new list has items oldReceiverList doesn't!
             for item in list(set(discovery.airplayReceivers) - set(self.oldReceiverList)):
@@ -177,7 +197,10 @@ class Window(QW.QDialog):
                 # item = QW.QListWidgetItem(str(item).replace("._airplay._tcp.local.", ""))
                 item = QW.QListWidgetItem(
                     # re.sub(r"(-\w*)?._(airplay|googlecast)._tcp.local.", "", str(item))
-                    discovery.deviceList[item].properName
+                    discovery.deviceList[item].properName +
+                    ": (" +
+                    discovery.deviceList[item].properType +
+                    ")"
                     )
                 self.deviceSelectList.addItem(item)
         if list(set(self.oldReceiverList) - set(discovery.airplayReceivers)) != []:

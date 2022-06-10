@@ -28,7 +28,7 @@ if __name__ == '__main__':
 #     sys.exit("Could not import Python3 Qt Libraries.")
 
 
-class Device():
+class Device(object):
     def __init__(self, info) -> None:
         self.type = info.type
         self.name = info.name
@@ -54,6 +54,7 @@ class AirplayDevice(Device):
         self.osvers = info.properties[b'osvers']
         self.properName = str(self.name).replace("._airplay._tcp.local.", "")
         self.vv = info.properties[b'vv']
+        self.properType = "Airplay"
 
 
 class ChromecastDevice(Device):
@@ -73,4 +74,5 @@ class ChromecastDevice(Device):
         self.nf = info.properties[b'nf']
         self.properName = bytes(self.fn).decode("utf-8")
         self.rs = info.properties[b'rs']
+        self.properType = "Chromecast"
 

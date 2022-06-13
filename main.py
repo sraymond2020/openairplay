@@ -7,6 +7,7 @@
 
 import re
 import sys
+import playAirplay
 
 global DEBUG
 DEBUG = True
@@ -160,25 +161,25 @@ class Window(QW.QDialog):
 
     def selectionChanged(self):
         # Eumerates Selected Device
-        # print("Selected items: ", self.deviceSelectList.selectedItems())
-        # print(self.deviceSelectList.selectedItems()[0].text())
         r = self.deviceSelectList.currentIndex().row()
-        name, device = str(self.deviceSelectList.selectedItems()[0].text()).split(": (")
-        device = device.replace(")", "")
-        # print(device)
-        # print(name)
-        deviceCheck = {
-            "Airplay": "._airplay._tcp.local.",
-            "Chromecast": "._googlecast._tcp.local."
-        }
-        for k, v in discovery.deviceList.items():
-            if k.find(deviceCheck["Airplay"]):
+        if r > 0:
+            name, device = str(self.deviceSelectList.selectedItems()[0].text()).split(": (")
+            device = device.replace(")", "")
+            if DEBUG:
+                # print(device)
+                # print(name)
                 pass
-            if k.find(deviceCheck["Chromecast"]):
-                pass
-                print(k) 
-                print(v)
-                print()
+            deviceCheck = {
+                "Airplay": "._airplay._tcp.local.",
+                "Chromecast": "._googlecast._tcp.local."
+            }
+            for k, v in discovery.deviceList.items():
+                if device == "Airplay":
+                    print("KEY is: ", k) 
+                    print("VALUE is: ", v)
+                    print()
+                elif device == "Chromecast":
+                    pass
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-import airplay
+import cast_devices
 try:
     import zeroconf
 except ImportError:
@@ -34,11 +34,11 @@ class AirplayListener(object):
         # print(info.properties[b'fn'])
         if str(name).find("_airplay._") > 0:
             displayName = str(info.name)
-            deviceList[name] = airplay.AirplayDevice(info)
+            deviceList[name] = cast_devices.AirplayDevice(info)
             # airplayReceivers.append([displayName, name])
         elif str(name).find("_googlecast._") > 0:
             displayName = bytes(info.properties[b'fn']).decode('utf-8')
-            deviceList[name] = airplay.ChromecastDevice(info)
+            deviceList[name] = cast_devices.ChromecastDevice(info)
             # airplayReceivers.append([displayName, name])
         airplayReceivers.append(name)
         devices[name] = info

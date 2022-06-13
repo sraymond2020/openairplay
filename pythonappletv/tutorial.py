@@ -3,17 +3,19 @@ from urllib.parse import urlencode, quote
 import asyncio
 import pyatv
 from pyatv import scan, pair
-from pyatv.helpers import is_streamable, is
+from pyatv.helpers import is_streamable
 from pyatv.const import Protocol
 
-localDirectory = os.getcwd()
-print(localDirectory)
+# localDirectory = os.getcwd()
+# print(localDirectory)
 
 async def main():
     loop = asyncio.get_event_loop()
 
     # Get a configuration with scan
-    atvs = await pyatv.scan(loop, identifier="68644B2BB753")
+    # atvs = await pyatv.scan(loop, identifier="68644B2BB753")
+    atvs = await pyatv.scan(loop, identifier="68:64:4B:2B:B7:53")
+    # atvs = await pyatv.scan(loop)
 
     # Apple TV configuration (first found device in this case)
     conf = atvs[0]
@@ -44,9 +46,9 @@ async def main():
     else:
         print("File not playable")
 
-    atv.close()
+    # atv.close()
     await asyncio.gather(*atv.close())
-    os.chdir(localDirectory)
+    # os.chdir(localDirectory)
 
 
 asyncio.run(main())  # asyncio.run requires python 3.7+

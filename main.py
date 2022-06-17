@@ -8,6 +8,7 @@
 import re
 import sys
 import playAirplay
+import asyncio
 
 global DEBUG
 DEBUG = True
@@ -174,12 +175,24 @@ class Window(QW.QDialog):
                 "Chromecast": "._googlecast._tcp.local."
             }
             for k, v in discovery.deviceList.items():
-                if device == "Airplay":
-                    print("KEY is: ", k) 
-                    print("VALUE is: ", v)
-                    print()
-                elif device == "Chromecast":
-                    pass
+                if str(v.name).find(deviceCheck[device]) > 0:
+                    if name == v.properName:
+                        print("KEY is: ", k) 
+                        print("VALUE is: ", v)
+                        print()
+                        self.activeDevice = v
+                        return
+        else:
+            self.activeDevice = None
+    
+
+    def playMedia(self):
+        if self.activeDevice is not None:
+            if self.activeDevice.properType == 'Airplay':
+                playAirplay.playMedia(bytes(
+                    self.activeDevice.id).decode("utf-8"), url="F:\Videos\VueJSCrashCourse2021.mp4")
+                # asyncio.run(playAirplay.playMedia(bytes(
+                #     self.activeDevice.id).decode("utf-8"), url="F:\Videos\VueJSCrashCourse2021.mp4"))
 
     def messageClicked(self):
         # In the case that someone clicks on the notification popup (impossible on Ubuntu Unity)
@@ -265,6 +278,7 @@ class Window(QW.QDialog):
         self.mediaGroupBox = QW.QGroupBox("Media Controller")
     
         self.playButton = QW.QPushButton("Play")
+        self.playButton.clicked.connect(self.playMedia)
         self.pauseButton = QW.QPushButton("Pause")
         self.stopButton = QW.QPushButton("Stop")
         self.backButton = QW.QPushButton("Back")

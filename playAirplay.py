@@ -8,7 +8,11 @@ from pyatv.helpers import is_streamable
 from pyatv.const import Protocol
 
 
-async def play(id, url="F:\Videos\VueJSCrashCourse2021.mp4"):
+def playMedia(id, url):
+    asyncio.run(play(id, url))  # asyncio.run requires python 3.7+
+
+
+async def play(id, url):
     loop = asyncio.get_event_loop()
 
     # Get a configuration with scan
@@ -32,5 +36,6 @@ async def play(id, url="F:\Videos\VueJSCrashCourse2021.mp4"):
 
 if __name__ == "__main__":
     id = "68:64:4B:2B:B7:53"
+    id = "68644B2BB753"
     url = "F:\Videos\VueJSCrashCourse2021.mp4"
     asyncio.run(play(id, url))  # asyncio.run requires python 3.7+

@@ -14,8 +14,13 @@ async def main():
 
     # Get a configuration with scan
     # atvs = await pyatv.scan(loop, identifier="68644B2BB753")
-    atvs = await pyatv.scan(loop, identifier="68:64:4B:2B:B7:53")
+    # atvs = await pyatv.scan(loop, identifier="68:64:4B:2B:B7:53")
+    atvs = await pyatv.scan(loop, hosts=["192.168.1.99"])
     # atvs = await pyatv.scan(loop)
+
+    if atvs == []:
+        print("No devices found.")
+        return None
 
     # Apple TV configuration (first found device in this case)
     conf = atvs[0]
@@ -33,7 +38,7 @@ async def main():
     # url = r"C:\Users\Shaun\Desktop\test folder\123.mp4"
     # url = r"C:\Users\Shaun\Desktop\BigBuckBunny.mp4"
     # url = r"C:\Users\Shaun\Desktop\test folder\BigBuckBunny.mp4"
-    # url2 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    # url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
     # print(quote(url2))
 
     # url = url.replace(" ","\ ")
@@ -41,10 +46,10 @@ async def main():
     # url = urlencode(url)
 
     print(url)
-    if is_streamable(url):
-        await atv.stream.play_url(url)
-    else:
-        print("File not playable")
+    # if is_streamable(url):
+    await atv.stream.play_url(url)
+    # else:
+        # print("File not playable")
 
     # atv.close()
     await asyncio.gather(*atv.close())

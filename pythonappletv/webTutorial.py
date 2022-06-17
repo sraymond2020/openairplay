@@ -203,7 +203,7 @@ def main():
     app["clients"] = {}
     app.add_routes(routes)
     app.on_shutdown.append(on_shutdown)
-    web.run_app(app, port=8085)
+    web.run_app(app, port=8086)
 
 
 if __name__ == "__main__":
